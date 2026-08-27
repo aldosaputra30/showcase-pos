@@ -207,10 +207,6 @@
       font-weight:600;
       font-size:13px;
     }
-    .product .stock{
-      font-size:11px;
-      color:#9a9384;
-    }
 
     /* ---------- Receipt tape ---------- */
     .receipt-wrap{
@@ -477,7 +473,7 @@
     <div class="panel">
       <div class="search-box">
         <span class="icon">🔍</span>
-        <input type="text" id="searchInput" placeholder="Cari nama produk atau SKU..." oninput="setSearch(this.value)">
+        <input type="text" id="searchInput" placeholder="Cari nama produk..." oninput="setSearch(this.value)">
       </div>
       <div class="chips" id="chips"></div>
       <div class="grid" id="productGrid"></div>
@@ -499,7 +495,6 @@
           <input type="number" id="inputDiscount" min="0" value="0">
         </div>
 
-        <div class="row"><span>Pajak (11%)</span><span id="sumTax">Rp0</span></div>
         <div class="row total"><span>TOTAL</span><span id="sumTotal">Rp0</span></div>
 
         <div class="field">
@@ -549,7 +544,7 @@ const categories = [
   { id: 'snack', name: 'Snack', icon: '🍟' },
 ];
 
-// gambar diambil dari unsplash (gratis)
+// gambar dari unsplash (gratis)
 const productImages = {
   'Espresso': 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=120&h=120&fit=crop&crop=center',
   'Americano': 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=120&h=120&fit=crop&crop=center',
@@ -593,7 +588,7 @@ const products = [
 /* ---------------- State ---------------- */
 let activeCategory = 'all';
 let searchTerm = '';
-let cart = []; // {id, name, price, qty}
+let cart = [];
 let paymentMethod = 'cash';
 const STORAGE_KEY = 'pos_sale_transactions';
 
@@ -697,9 +692,7 @@ function removeLine(id){
 /* ---------------- Totals ---------------- */
 function subtotal(){ return cart.reduce((s,i) => s + i.price * i.qty, 0); }
 function discountValue(){ return Math.max(parseInt(document.getElementById('inputDiscount').value) || 0, 0); }
-function taxable(){ return Math.max(subtotal() - discountValue(), 0); }
-function tax(){ return Math.round(taxable() * 0.11); }
-function total(){ return taxable() + tax(); }
+function total(){ return Math.max(subtotal() - discountValue(), 0); }
 function paidValue(){ return Math.max(parseInt(document.getElementById('inputPaid').value) || 0, 0); }
 
 /* ---------------- Render: cart / receipt ---------------- */
@@ -723,7 +716,6 @@ function renderCart(){
   }
 
   document.getElementById('sumSubtotal').textContent = formatRupiah(subtotal());
-  document.getElementById('sumTax').textContent = formatRupiah(tax());
   document.getElementById('sumTotal').textContent = formatRupiah(total());
 
   const change = Math.max(paidValue() - total(), 0);
@@ -758,14 +750,12 @@ function checkout(){
     items: cart.map(i => ({ name: i.name, price: i.price, qty: i.qty, subtotal: i.price * i.qty })),
     subtotal: subtotal(),
     discount: discountValue(),
-    tax: tax(),
     total: total(),
     paid: paid,
     change: Math.max(paid - total(), 0),
     method: paymentMethod,
   };
 
-  // deduct dummy stock (in-memory only, resets on reload)
   cart.forEach(line => {
     const product = products.find(p => p.id === line.id);
     product.stock -= line.qty;
@@ -774,7 +764,6 @@ function checkout(){
   saveTransaction(tx);
   showReceiptModal(tx);
 
-  // reset cart
   cart = [];
   document.getElementById('inputDiscount').value = 0;
   document.getElementById('inputPaid').value = 0;
@@ -795,7 +784,6 @@ function showReceiptModal(tx){
     <hr>
     <div class="row"><span>Subtotal</span><span>${formatRupiah(tx.subtotal)}</span></div>
     <div class="row"><span>Diskon</span><span>-${formatRupiah(tx.discount)}</span></div>
-    <div class="row"><span>Pajak</span><span>${formatRupiah(tx.tax)}</span></div>
     <div class="row total"><span>TOTAL</span><span>${formatRupiah(tx.total)}</span></div>
     <div class="row"><span>Bayar (${tx.method.toUpperCase()})</span><span>${formatRupiah(tx.paid)}</span></div>
     <div class="row"><span>Kembali</span><span>${formatRupiah(tx.change)}</span></div>
