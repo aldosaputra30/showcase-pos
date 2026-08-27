@@ -1,451 +1,466 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>POS Sale — Kasir Demo</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root{
-    --ink:#1B2430;
-    --paper:#F7F5EF;
-    --paper-dim:#EDEAE1;
-    --accent:#2E7D6B;
-    --accent-dark:#22604F;
-    --amber:#E8B04B;
-    --danger:#C1443C;
-    --line:#DAD5C7;
-    --radius:14px;
-  }
-  *{box-sizing:border-box;}
-  html,body{margin:0;padding:0;}
-  body{
-    background:var(--ink);
-    color:var(--ink);
-    font-family:'Inter',sans-serif;
-    min-height:100vh;
-  }
-  .app{
-    max-width:1180px;
-    margin:0 auto;
-    padding:20px 16px 60px;
-  }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>POS Sale — Kasir Demo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --ink:#1B2430;
+      --paper:#F7F5EF;
+      --paper-dim:#EDEAE1;
+      --accent:#2E7D6B;
+      --accent-dark:#22604F;
+      --amber:#E8B04B;
+      --danger:#C1443C;
+      --line:#DAD5C7;
+      --radius:14px;
+    }
+    *{box-sizing:border-box;}
+    html,body{margin:0;padding:0;}
+    body{
+      background:var(--ink);
+      color:var(--ink);
+      font-family:'Inter',sans-serif;
+      min-height:100vh;
+    }
+    .app{
+      max-width:1180px;
+      margin:0 auto;
+      padding:20px 16px 60px;
+    }
 
-  /* ---------- Header ---------- */
-  header.top{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    padding:14px 6px 22px;
-    color:var(--paper);
-  }
-  .brand{
-    display:flex;
-    align-items:center;
-    gap:10px;
-    font-family:'Space Grotesk',sans-serif;
-    font-weight:700;
-    font-size:20px;
-    letter-spacing:-0.02em;
-  }
-  .brand .mark{
-    width:34px;height:34px;border-radius:9px;
-    background:var(--accent);
-    display:flex;align-items:center;justify-content:center;
-    font-size:18px;
-  }
-  .tabs{
-    display:flex;
-    background:rgba(255,255,255,0.08);
-    border-radius:999px;
-    padding:4px;
-    gap:2px;
-  }
-  .tabs button{
-    border:none;
-    background:transparent;
-    color:rgba(247,245,239,0.6);
-    font-family:'Space Grotesk',sans-serif;
-    font-weight:600;
-    font-size:13px;
-    padding:8px 18px;
-    border-radius:999px;
-    cursor:pointer;
-    transition:all .2s;
-  }
-  .tabs button.active{
-    background:var(--paper);
-    color:var(--ink);
-  }
+    /* ---------- Header ---------- */
+    header.top{
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      padding:14px 6px 22px;
+      color:var(--paper);
+    }
+    .brand{
+      display:flex;
+      align-items:center;
+      gap:10px;
+      font-family:'Space Grotesk',sans-serif;
+      font-weight:700;
+      font-size:20px;
+      letter-spacing:-0.02em;
+    }
+    .brand .mark{
+      width:34px;height:34px;border-radius:9px;
+      background:var(--accent);
+      display:flex;align-items:center;justify-content:center;
+      font-size:18px;
+    }
+    .tabs{
+      display:flex;
+      background:rgba(255,255,255,0.08);
+      border-radius:999px;
+      padding:4px;
+      gap:2px;
+    }
+    .tabs button{
+      border:none;
+      background:transparent;
+      color:rgba(247,245,239,0.6);
+      font-family:'Space Grotesk',sans-serif;
+      font-weight:600;
+      font-size:13px;
+      padding:8px 18px;
+      border-radius:999px;
+      cursor:pointer;
+      transition:all .2s;
+    }
+    .tabs button.active{
+      background:var(--paper);
+      color:var(--ink);
+    }
 
-  /* ---------- Layout ---------- */
-  .layout{
-    display:grid;
-    grid-template-columns:1fr 360px;
-    gap:20px;
-    align-items:start;
-  }
-  @media (max-width:900px){
-    .layout{grid-template-columns:1fr;}
-  }
+    /* ---------- Layout ---------- */
+    .layout{
+      display:grid;
+      grid-template-columns:1fr 360px;
+      gap:20px;
+      align-items:start;
+    }
+    @media (max-width:900px){
+      .layout{grid-template-columns:1fr;}
+    }
 
-  .panel{
-    background:var(--paper);
-    border-radius:var(--radius);
-    padding:18px;
-  }
+    .panel{
+      background:var(--paper);
+      border-radius:var(--radius);
+      padding:18px;
+    }
 
-  /* ---------- Search ---------- */
-  .search-box{
-    position:relative;
-    margin-bottom:14px;
-  }
-  .search-box input{
-    width:100%;
-    border:1.5px solid var(--line);
-    background:#fff;
-    border-radius:10px;
-    padding:10px 14px 10px 38px;
-    font-family:'Inter',sans-serif;
-    font-size:13.5px;
-    color:var(--ink);
-  }
-  .search-box input:focus{
-    outline:2px solid var(--accent);
-    outline-offset:1px;
-  }
-  .search-box .icon{
-    position:absolute;
-    left:12px;
-    top:50%;
-    transform:translateY(-50%);
-    font-size:14px;
-    opacity:.5;
-    pointer-events:none;
-  }
-  .no-results{
-    grid-column:1/-1;
-    text-align:center;
-    padding:40px 0;
-    color:#a8a294;
-    font-size:13px;
-  }
+    /* ---------- Search ---------- */
+    .search-box{
+      position:relative;
+      margin-bottom:14px;
+    }
+    .search-box input{
+      width:100%;
+      border:1.5px solid var(--line);
+      background:#fff;
+      border-radius:10px;
+      padding:10px 14px 10px 38px;
+      font-family:'Inter',sans-serif;
+      font-size:13.5px;
+      color:var(--ink);
+    }
+    .search-box input:focus{
+      outline:2px solid var(--accent);
+      outline-offset:1px;
+    }
+    .search-box .icon{
+      position:absolute;
+      left:12px;
+      top:50%;
+      transform:translateY(-50%);
+      font-size:14px;
+      opacity:.5;
+      pointer-events:none;
+    }
+    .no-results{
+      grid-column:1/-1;
+      text-align:center;
+      padding:40px 0;
+      color:#a8a294;
+      font-size:13px;
+    }
 
-  /* ---------- Category chips ---------- */
-  .chips{
-    display:flex;
-    gap:8px;
-    flex-wrap:wrap;
-    margin-bottom:16px;
-  }
-  .chip{
-    border:1.5px solid var(--line);
-    background:#fff;
-    color:var(--ink);
-    font-family:'Space Grotesk',sans-serif;
-    font-weight:600;
-    font-size:13px;
-    padding:8px 16px;
-    border-radius:999px;
-    cursor:pointer;
-    transition:.15s;
-  }
-  .chip.active{
-    background:var(--ink);
-    border-color:var(--ink);
-    color:var(--paper);
-  }
+    /* ---------- Category chips ---------- */
+    .chips{
+      display:flex;
+      gap:8px;
+      flex-wrap:wrap;
+      margin-bottom:16px;
+    }
+    .chip{
+      border:1.5px solid var(--line);
+      background:#fff;
+      color:var(--ink);
+      font-family:'Space Grotesk',sans-serif;
+      font-weight:600;
+      font-size:13px;
+      padding:8px 16px;
+      border-radius:999px;
+      cursor:pointer;
+      transition:.15s;
+    }
+    .chip.active{
+      background:var(--ink);
+      border-color:var(--ink);
+      color:var(--paper);
+    }
 
-  /* ---------- Product grid ---------- */
-  .grid{
-    display:grid;
-    grid-template-columns:repeat(auto-fill,minmax(140px,1fr));
-    gap:12px;
-  }
-  .product{
-    background:#fff;
-    border:1.5px solid var(--line);
-    border-radius:12px;
-    padding:14px 12px;
-    text-align:left;
-    cursor:pointer;
-    transition:transform .12s, box-shadow .12s, border-color .12s;
-    display:flex;
-    flex-direction:column;
-    gap:6px;
-    font-family:inherit;
-  }
-  .product:hover{
-    border-color:var(--accent);
-    box-shadow:0 6px 16px rgba(46,125,107,0.12);
-    transform:translateY(-2px);
-  }
-  .product:disabled{
-    opacity:.35;
-    cursor:not-allowed;
-    transform:none;
-    box-shadow:none;
-  }
-  .product .icon{font-size:28px;}
-  .product .name{font-weight:600;font-size:13.5px;line-height:1.25;}
-  .product .price{
-    font-family:'IBM Plex Mono',monospace;
-    color:var(--accent-dark);
-    font-weight:600;
-    font-size:13px;
-  }
-  .product .stock{font-size:11px;color:#9a9384;}
+    /* ---------- Product grid ---------- */
+    .grid{
+      display:grid;
+      grid-template-columns:repeat(auto-fill,minmax(150px,1fr));
+      gap:12px;
+    }
+    .product{
+      background:#fff;
+      border:1.5px solid var(--line);
+      border-radius:12px;
+      padding:12px 10px;
+      text-align:center;
+      cursor:pointer;
+      transition:transform .12s, box-shadow .12s, border-color .12s;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      gap:4px;
+      font-family:inherit;
+    }
+    .product:hover{
+      border-color:var(--accent);
+      box-shadow:0 6px 16px rgba(46,125,107,0.12);
+      transform:translateY(-2px);
+    }
+    .product:disabled{
+      opacity:.35;
+      cursor:not-allowed;
+      transform:none;
+      box-shadow:none;
+    }
+    .product .product-image{
+      width:80px;
+      height:80px;
+      object-fit:cover;
+      border-radius:10px;
+      background:#f0ede5;
+      margin-bottom:4px;
+    }
+    .product .name{
+      font-weight:600;
+      font-size:13px;
+      line-height:1.2;
+    }
+    .product .price{
+      font-family:'IBM Plex Mono',monospace;
+      color:var(--accent-dark);
+      font-weight:600;
+      font-size:13px;
+    }
+    .product .stock{
+      font-size:11px;
+      color:#9a9384;
+    }
 
-  /* ---------- Receipt tape ---------- */
-  .receipt-wrap{
-    position:sticky;
-    top:20px;
-  }
-  .receipt{
-    background:var(--paper);
-    border-radius:0 0 var(--radius) var(--radius);
-    position:relative;
-    padding:22px 18px 18px;
-    font-family:'IBM Plex Mono',monospace;
-  }
-  .receipt::before{
-    content:"";
-    display:block;
-    position:absolute;
-    top:-9px;left:0;right:0;height:16px;
-    background:
-      linear-gradient(-45deg, var(--paper) 8px, transparent 0) 0 4px,
-      linear-gradient(45deg, var(--paper) 8px, transparent 0) 0 4px;
-    background-size:16px 16px;
-    background-repeat:repeat-x;
-  }
-  .receipt h2{
-    font-family:'Space Grotesk',sans-serif;
-    font-size:15px;
-    margin:0 0 2px;
-    text-align:center;
-    letter-spacing:.06em;
-  }
-  .receipt .sub{
-    text-align:center;
-    font-size:10.5px;
-    color:#8f8a7c;
-    margin-bottom:12px;
-  }
-  .receipt hr{
-    border:none;
-    border-top:1.5px dashed var(--line);
-    margin:10px 0;
-  }
-  .cart-lines{
-    max-height:230px;
-    overflow-y:auto;
-    display:flex;
-    flex-direction:column;
-    gap:8px;
-    margin:4px 0;
-  }
-  .cart-line{
-    display:flex;
-    align-items:center;
-    gap:8px;
-    font-size:12px;
-    animation: printIn .25s ease;
-  }
-  @keyframes printIn{
-    from{opacity:0; transform:translateY(-6px);}
-    to{opacity:1; transform:translateY(0);}
-  }
-  .cart-line .l-name{flex:1; line-height:1.3;}
-  .cart-line .l-price{color:#8f8a7c; font-size:10.5px;}
-  .qty-ctrl{
-    display:flex;
-    align-items:center;
-    gap:4px;
-  }
-  .qty-ctrl button{
-    width:20px;height:20px;
-    border:1px solid var(--line);
-    background:#fff;
-    border-radius:5px;
-    cursor:pointer;
-    font-size:12px;
-    line-height:1;
-  }
-  .cart-line .l-sub{width:64px; text-align:right; font-weight:600;}
-  .cart-line .l-remove{
-    color:#c4bfae;
-    cursor:pointer;
-    font-size:12px;
-    padding:0 2px;
-  }
-  .cart-line .l-remove:hover{color:var(--danger);}
-  .empty-cart{
-    text-align:center;
-    color:#a8a294;
-    font-size:12px;
-    padding:30px 0;
-    font-family:'Inter',sans-serif;
-  }
-  .row{
-    display:flex;
-    justify-content:space-between;
-    font-size:12.5px;
-    margin:5px 0;
-  }
-  .row.total{
-    font-size:15px;
-    font-weight:700;
-    color:var(--accent-dark);
-    border-top:1.5px dashed var(--line);
-    padding-top:8px;
-    margin-top:8px;
-  }
-  .field{margin:8px 0;}
-  .field label{
-    display:block;
-    font-family:'Inter',sans-serif;
-    font-size:10.5px;
-    text-transform:uppercase;
-    letter-spacing:.05em;
-    color:#8f8a7c;
-    margin-bottom:4px;
-  }
-  .field input, .field select{
-    width:100%;
-    border:1.5px solid var(--line);
-    background:#fff;
-    border-radius:8px;
-    padding:8px 10px;
-    font-family:'IBM Plex Mono',monospace;
-    font-size:13px;
-    color:var(--ink);
-  }
-  .field input:focus, .field select:focus{
-    outline:2px solid var(--accent);
-    outline-offset:1px;
-  }
-  .pay-methods{
-    display:flex;
-    gap:6px;
-  }
-  .pay-methods button{
-    flex:1;
-    border:1.5px solid var(--line);
-    background:#fff;
-    border-radius:8px;
-    padding:8px 4px;
-    font-family:'Inter',sans-serif;
-    font-size:11.5px;
-    font-weight:600;
-    cursor:pointer;
-  }
-  .pay-methods button.active{
-    background:var(--ink);
-    border-color:var(--ink);
-    color:var(--paper);
-  }
-  .checkout-btn{
-    width:100%;
-    background:var(--accent);
-    color:#fff;
-    border:none;
-    border-radius:10px;
-    padding:14px;
-    font-family:'Space Grotesk',sans-serif;
-    font-weight:700;
-    font-size:14.5px;
-    letter-spacing:.02em;
-    cursor:pointer;
-    margin-top:10px;
-    transition:background .15s;
-  }
-  .checkout-btn:hover:not(:disabled){background:var(--accent-dark);}
-  .checkout-btn:disabled{
-    background:#cfcabb;
-    cursor:not-allowed;
-  }
+    /* ---------- Receipt tape ---------- */
+    .receipt-wrap{
+      position:sticky;
+      top:20px;
+    }
+    .receipt{
+      background:var(--paper);
+      border-radius:0 0 var(--radius) var(--radius);
+      position:relative;
+      padding:22px 18px 18px;
+      font-family:'IBM Plex Mono',monospace;
+    }
+    .receipt::before{
+      content:"";
+      display:block;
+      position:absolute;
+      top:-9px;left:0;right:0;height:16px;
+      background:
+        linear-gradient(-45deg, var(--paper) 8px, transparent 0) 0 4px,
+        linear-gradient(45deg, var(--paper) 8px, transparent 0) 0 4px;
+      background-size:16px 16px;
+      background-repeat:repeat-x;
+    }
+    .receipt h2{
+      font-family:'Space Grotesk',sans-serif;
+      font-size:15px;
+      margin:0 0 2px;
+      text-align:center;
+      letter-spacing:.06em;
+    }
+    .receipt .sub{
+      text-align:center;
+      font-size:10.5px;
+      color:#8f8a7c;
+      margin-bottom:12px;
+    }
+    .receipt hr{
+      border:none;
+      border-top:1.5px dashed var(--line);
+      margin:10px 0;
+    }
+    .cart-lines{
+      max-height:230px;
+      overflow-y:auto;
+      display:flex;
+      flex-direction:column;
+      gap:8px;
+      margin:4px 0;
+    }
+    .cart-line{
+      display:flex;
+      align-items:center;
+      gap:8px;
+      font-size:12px;
+      animation: printIn .25s ease;
+    }
+    @keyframes printIn{
+      from{opacity:0; transform:translateY(-6px);}
+      to{opacity:1; transform:translateY(0);}
+    }
+    .cart-line .l-name{flex:1; line-height:1.3;}
+    .cart-line .l-price{color:#8f8a7c; font-size:10.5px;}
+    .qty-ctrl{
+      display:flex;
+      align-items:center;
+      gap:4px;
+    }
+    .qty-ctrl button{
+      width:20px;height:20px;
+      border:1px solid var(--line);
+      background:#fff;
+      border-radius:5px;
+      cursor:pointer;
+      font-size:12px;
+      line-height:1;
+    }
+    .cart-line .l-sub{width:64px; text-align:right; font-weight:600;}
+    .cart-line .l-remove{
+      color:#c4bfae;
+      cursor:pointer;
+      font-size:12px;
+      padding:0 2px;
+    }
+    .cart-line .l-remove:hover{color:var(--danger);}
+    .empty-cart{
+      text-align:center;
+      color:#a8a294;
+      font-size:12px;
+      padding:30px 0;
+      font-family:'Inter',sans-serif;
+    }
+    .row{
+      display:flex;
+      justify-content:space-between;
+      font-size:12.5px;
+      margin:5px 0;
+    }
+    .row.total{
+      font-size:15px;
+      font-weight:700;
+      color:var(--accent-dark);
+      border-top:1.5px dashed var(--line);
+      padding-top:8px;
+      margin-top:8px;
+    }
+    .field{margin:8px 0;}
+    .field label{
+      display:block;
+      font-family:'Inter',sans-serif;
+      font-size:10.5px;
+      text-transform:uppercase;
+      letter-spacing:.05em;
+      color:#8f8a7c;
+      margin-bottom:4px;
+    }
+    .field input, .field select{
+      width:100%;
+      border:1.5px solid var(--line);
+      background:#fff;
+      border-radius:8px;
+      padding:8px 10px;
+      font-family:'IBM Plex Mono',monospace;
+      font-size:13px;
+      color:var(--ink);
+    }
+    .field input:focus, .field select:focus{
+      outline:2px solid var(--accent);
+      outline-offset:1px;
+    }
+    .pay-methods{
+      display:flex;
+      gap:6px;
+    }
+    .pay-methods button{
+      flex:1;
+      border:1.5px solid var(--line);
+      background:#fff;
+      border-radius:8px;
+      padding:8px 4px;
+      font-family:'Inter',sans-serif;
+      font-size:11.5px;
+      font-weight:600;
+      cursor:pointer;
+    }
+    .pay-methods button.active{
+      background:var(--ink);
+      border-color:var(--ink);
+      color:var(--paper);
+    }
+    .checkout-btn{
+      width:100%;
+      background:var(--accent);
+      color:#fff;
+      border:none;
+      border-radius:10px;
+      padding:14px;
+      font-family:'Space Grotesk',sans-serif;
+      font-weight:700;
+      font-size:14.5px;
+      letter-spacing:.02em;
+      cursor:pointer;
+      margin-top:10px;
+      transition:background .15s;
+    }
+    .checkout-btn:hover:not(:disabled){background:var(--accent-dark);}
+    .checkout-btn:disabled{
+      background:#cfcabb;
+      cursor:not-allowed;
+    }
 
-  /* ---------- History ---------- */
-  .history-table{
-    width:100%;
-    border-collapse:collapse;
-    font-size:13px;
-  }
-  .history-table th{
-    text-align:left;
-    font-family:'Space Grotesk',sans-serif;
-    font-size:11.5px;
-    text-transform:uppercase;
-    letter-spacing:.04em;
-    color:#8f8a7c;
-    border-bottom:1.5px solid var(--line);
-    padding:8px 10px;
-  }
-  .history-table td{
-    padding:10px;
-    border-bottom:1px solid var(--line);
-    font-family:'IBM Plex Mono',monospace;
-  }
-  .history-table tr:hover td{background:var(--paper-dim);}
-  .history-table .view-btn{
-    font-family:'Inter',sans-serif;
-    color:var(--accent-dark);
-    cursor:pointer;
-    font-weight:600;
-    font-size:12px;
-  }
-  .empty-history{
-    text-align:center;
-    padding:50px 0;
-    color:#a8a294;
-    font-size:13px;
-  }
+    /* ---------- History ---------- */
+    .history-table{
+      width:100%;
+      border-collapse:collapse;
+      font-size:13px;
+    }
+    .history-table th{
+      text-align:left;
+      font-family:'Space Grotesk',sans-serif;
+      font-size:11.5px;
+      text-transform:uppercase;
+      letter-spacing:.04em;
+      color:#8f8a7c;
+      border-bottom:1.5px solid var(--line);
+      padding:8px 10px;
+    }
+    .history-table td{
+      padding:10px;
+      border-bottom:1px solid var(--line);
+      font-family:'IBM Plex Mono',monospace;
+    }
+    .history-table tr:hover td{background:var(--paper-dim);}
+    .history-table .view-btn{
+      font-family:'Inter',sans-serif;
+      color:var(--accent-dark);
+      cursor:pointer;
+      font-weight:600;
+      font-size:12px;
+    }
+    .empty-history{
+      text-align:center;
+      padding:50px 0;
+      color:#a8a294;
+      font-size:13px;
+    }
 
-  /* ---------- Modal ---------- */
-  .modal-bg{
-    position:fixed; inset:0;
-    background:rgba(27,36,48,0.55);
-    display:none;
-    align-items:center;
-    justify-content:center;
-    z-index:50;
-    padding:20px;
-  }
-  .modal-bg.show{display:flex;}
-  .modal{
-    background:var(--paper);
-    border-radius:16px;
-    max-width:360px;
-    width:100%;
-    padding:24px;
-    font-family:'IBM Plex Mono',monospace;
-    max-height:90vh;
-    overflow-y:auto;
-  }
-  .modal h3{
-    font-family:'Space Grotesk',sans-serif;
-    text-align:center;
-    margin:0 0 4px;
-  }
-  .modal .sub{text-align:center;font-size:11px;color:#8f8a7c;margin-bottom:14px;}
-  .modal .close-btn{
-    width:100%;
-    margin-top:14px;
-    background:var(--ink);
-    color:var(--paper);
-    border:none;
-    border-radius:10px;
-    padding:12px;
-    font-family:'Space Grotesk',sans-serif;
-    font-weight:700;
-    cursor:pointer;
-  }
+    /* ---------- Modal ---------- */
+    .modal-bg{
+      position:fixed; inset:0;
+      background:rgba(27,36,48,0.55);
+      display:none;
+      align-items:center;
+      justify-content:center;
+      z-index:50;
+      padding:20px;
+    }
+    .modal-bg.show{display:flex;}
+    .modal{
+      background:var(--paper);
+      border-radius:16px;
+      max-width:360px;
+      width:100%;
+      padding:24px;
+      font-family:'IBM Plex Mono',monospace;
+      max-height:90vh;
+      overflow-y:auto;
+    }
+    .modal h3{
+      font-family:'Space Grotesk',sans-serif;
+      text-align:center;
+      margin:0 0 4px;
+    }
+    .modal .sub{text-align:center;font-size:11px;color:#8f8a7c;margin-bottom:14px;}
+    .modal .close-btn{
+      width:100%;
+      margin-top:14px;
+      background:var(--ink);
+      color:var(--paper);
+      border:none;
+      border-radius:10px;
+      padding:12px;
+      font-family:'Space Grotesk',sans-serif;
+      font-weight:700;
+      cursor:pointer;
+    }
 
-  ::-webkit-scrollbar{width:6px;}
-  ::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px;}
-</style>
+    ::-webkit-scrollbar{width:6px;}
+    ::-webkit-scrollbar-thumb{background:var(--line);border-radius:3px;}
+  </style>
 </head>
 <body>
 <div class="app">
@@ -534,24 +549,45 @@ const categories = [
   { id: 'snack', name: 'Snack', icon: '🍟' },
 ];
 
+// gambar diambil dari unsplash (gratis)
+const productImages = {
+  'Espresso': 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=120&h=120&fit=crop&crop=center',
+  'Americano': 'https://images.unsplash.com/photo-1514432324607-a09d9b4aefdd?w=120&h=120&fit=crop&crop=center',
+  'Cappuccino': 'https://images.unsplash.com/photo-1534778101976-62847782c213?w=120&h=120&fit=crop&crop=center',
+  'Kopi Susu Gula Aren': 'https://plus.unsplash.com/premium_photo-1669374537636-518629de3b85?w=120&h=120&fit=crop&crop=center',
+  'Caramel Macchiato': 'https://images.unsplash.com/photo-1485808191679-5f86510681a2?w=120&h=120&fit=crop&crop=center',
+  'Matcha Latte': 'https://images.unsplash.com/photo-1515823064-d6e0c04616a7?w=120&h=120&fit=crop&crop=center',
+  'Chocolate Latte': 'https://images.unsplash.com/photo-1608363087711-9280f549a29e?w=120&h=120&fit=crop&crop=center',
+  'Es Teh Manis': 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=120&h=120&fit=crop&crop=center',
+  'Lemon Tea': 'https://images.unsplash.com/photo-1556679343-c7306c1976bc?w=120&h=120&fit=crop&crop=center',
+  'Nasi Goreng': 'https://images.unsplash.com/photo-1512058564366-18510be2db19?w=120&h=120&fit=crop&crop=center',
+  'Ayam Geprek': 'https://images.unsplash.com/photo-1585032226651-759b368d7246?w=120&h=120&fit=crop&crop=center',
+  'Roti Bakar Coklat': 'https://images.unsplash.com/photo-1694111154362-dd55943be353?w=120&h=120&fit=crop&crop=center',
+  'Sandwich Telur': 'https://images.unsplash.com/photo-1553909489-cd47e0907980?w=120&h=120&fit=crop&crop=center',
+  'Kentang Goreng': 'https://images.unsplash.com/photo-1630384060421-cb20d0e0649d?w=120&h=120&fit=crop&crop=center',
+  'Pisang Goreng': 'https://images.unsplash.com/photo-1601050690597-df0568f70950?w=120&h=120&fit=crop&crop=center',
+  'Cireng': 'https://plus.unsplash.com/premium_photo-1679090007126-1b79c91b95a6?w=120&h=120&fit=crop&crop=center',
+  'Donat Coklat': 'https://images.unsplash.com/photo-1551024601-bec78aea704b?w=120&h=120&fit=crop&crop=center',
+};
+
 const products = [
-  { id: 1, cat: 'kopi', name: 'Espresso', price: 18000, stock: 50, icon: '☕' },
-  { id: 2, cat: 'kopi', name: 'Americano', price: 20000, stock: 50, icon: '☕' },
-  { id: 3, cat: 'kopi', name: 'Cappuccino', price: 25000, stock: 40, icon: '☕' },
-  { id: 4, cat: 'kopi', name: 'Kopi Susu Gula Aren', price: 22000, stock: 45, icon: '🥛' },
-  { id: 5, cat: 'kopi', name: 'Caramel Macchiato', price: 28000, stock: 30, icon: '☕' },
-  { id: 6, cat: 'nonkopi', name: 'Matcha Latte', price: 26000, stock: 35, icon: '🍵' },
-  { id: 7, cat: 'nonkopi', name: 'Chocolate Latte', price: 24000, stock: 35, icon: '🍫' },
-  { id: 8, cat: 'nonkopi', name: 'Es Teh Manis', price: 8000, stock: 60, icon: '🧋' },
-  { id: 9, cat: 'nonkopi', name: 'Lemon Tea', price: 15000, stock: 40, icon: '🍋' },
-  { id: 10, cat: 'makanan', name: 'Nasi Goreng', price: 28000, stock: 25, icon: '🍛' },
-  { id: 11, cat: 'makanan', name: 'Ayam Geprek', price: 25000, stock: 25, icon: '🍗' },
-  { id: 12, cat: 'makanan', name: 'Roti Bakar Coklat', price: 18000, stock: 30, icon: '🍞' },
-  { id: 13, cat: 'makanan', name: 'Sandwich Telur', price: 20000, stock: 20, icon: '🥪' },
-  { id: 14, cat: 'snack', name: 'Kentang Goreng', price: 15000, stock: 40, icon: '🍟' },
-  { id: 15, cat: 'snack', name: 'Pisang Goreng', price: 12000, stock: 30, icon: '🍌' },
-  { id: 16, cat: 'snack', name: 'Cireng Bumbu Rujak', price: 13000, stock: 30, icon: '🥟' },
-  { id: 17, cat: 'snack', name: 'Donat Coklat', price: 10000, stock: 35, icon: '🍩' },
+  { id: 1, cat: 'kopi', name: 'Espresso', price: 18000, stock: 50 },
+  { id: 2, cat: 'kopi', name: 'Americano', price: 20000, stock: 50 },
+  { id: 3, cat: 'kopi', name: 'Cappuccino', price: 25000, stock: 40 },
+  { id: 4, cat: 'kopi', name: 'Kopi Susu Gula Aren', price: 22000, stock: 45 },
+  { id: 5, cat: 'kopi', name: 'Caramel Macchiato', price: 28000, stock: 30 },
+  { id: 6, cat: 'nonkopi', name: 'Matcha Latte', price: 26000, stock: 35 },
+  { id: 7, cat: 'nonkopi', name: 'Chocolate Latte', price: 24000, stock: 35 },
+  { id: 8, cat: 'nonkopi', name: 'Es Teh Manis', price: 8000, stock: 60 },
+  { id: 9, cat: 'nonkopi', name: 'Lemon Tea', price: 15000, stock: 40 },
+  { id: 10, cat: 'makanan', name: 'Nasi Goreng', price: 28000, stock: 25 },
+  { id: 11, cat: 'makanan', name: 'Ayam Geprek', price: 25000, stock: 25 },
+  { id: 12, cat: 'makanan', name: 'Roti Bakar Coklat', price: 18000, stock: 30 },
+  { id: 13, cat: 'makanan', name: 'Sandwich Telur', price: 20000, stock: 20 },
+  { id: 14, cat: 'snack', name: 'Kentang Goreng', price: 15000, stock: 40 },
+  { id: 15, cat: 'snack', name: 'Pisang Goreng', price: 12000, stock: 30 },
+  { id: 16, cat: 'snack', name: 'Cireng Bumbu Rujak', price: 13000, stock: 30 },
+  { id: 17, cat: 'snack', name: 'Donat Coklat', price: 10000, stock: 35 },
 ];
 
 /* ---------------- State ---------------- */
@@ -577,6 +613,10 @@ function saveTransaction(tx){
   const all = getTransactions();
   all.unshift(tx);
   localStorage.setItem(STORAGE_KEY, JSON.stringify(all));
+}
+
+function getProductImage(name) {
+  return productImages[name] || 'https://images.unsplash.com/photo-1546069901-ba9599a7e63c?w=120&h=120&fit=crop&crop=center';
 }
 
 /* ---------------- Render: chips ---------------- */
@@ -615,9 +655,10 @@ function renderProducts(){
   grid.innerHTML = list.map(p => {
     const remaining = p.stock - soldQtyOf(p.id);
     const disabled = remaining <= 0 ? 'disabled' : '';
+    const imgSrc = getProductImage(p.name);
     return `
       <button class="product" ${disabled} onclick="addToCart(${p.id})">
-        <div class="icon">${p.icon}</div>
+        <img class="product-image" src="${imgSrc}" alt="${p.name}" loading="lazy">
         <div class="name">${p.name}</div>
         <div class="price">${formatRupiah(p.price)}</div>
         <div class="stock">Stok: ${remaining}</div>
