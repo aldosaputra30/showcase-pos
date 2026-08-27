@@ -661,7 +661,6 @@ function renderProducts(){
         <img class="product-image" src="${imgSrc}" alt="${p.name}" loading="lazy">
         <div class="name">${p.name}</div>
         <div class="price">${formatRupiah(p.price)}</div>
-        <div class="stock">Stok: ${remaining}</div>
       </button>`;
   }).join('');
 }
